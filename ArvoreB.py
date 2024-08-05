@@ -1,14 +1,14 @@
 from No import No
 
 class ArvoreB:
-    def __init__(self, t):
-        self.raiz = No(t, True)
-        self.t = t
+    def __init__(self, ordem):
+        self.raiz = No(ordem, True)
+        self.ordem = ordem
 
     def inserir(self, chave):
         raiz = self.raiz
-        if len(raiz.chaves) == 2 * self.t - 1:
-            new_raiz = No(self.t, False)
+        if len(raiz.chaves) == 2 * self.ordem - 1:
+            new_raiz = No(self.ordem, False)
             new_raiz.filhos.append(raiz)
             new_raiz.dividi_pagina(0)
             idx = 0
@@ -52,7 +52,7 @@ class ArvoreB:
                 return
         
         with open("saida.txt", 'a') as arquivo:
-            arquivo.write(str(self.t) + " " + str(self.quantidade_de_niveis()) + "\n")
+            arquivo.write(str(self.ordem) + " " + str(self.quantidade_de_niveis()) + "\n")
             
         
         fila_de_nos = [(self.raiz, 0)]  # Fila de nós para BFS com seus níveis

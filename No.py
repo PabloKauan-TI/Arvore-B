@@ -1,6 +1,6 @@
 class No:
-    def __init__(self, t, folha=False):
-        self.t = t  # Grau mínimo (define o intervalo de número de chaves)
+    def __init__(self, ordem, folha=False):
+        self.ordem = ordem  # Grau mínimo (define o intervalo de número de chaves)
         self.folha = folha  # Verdadeiro se o nó é uma folha
         self.chaves = []  # Lista de chaves no nó
         self.filhos = []  # Lista de filhos (apenas se não for uma folha)
@@ -18,22 +18,22 @@ class No:
             while i >= 0 and chave < self.chaves[i]:
                 i -= 1
             i += 1
-            if len(self.filhos[i].chaves) == 2 * self.t - 1:
+            if len(self.filhos[i].chaves) == 2 * self.ordem - 1:
                 self.dividi_pagina(i)
                 if chave > self.chaves[i]:
                     i += 1
             self.filhos[i].inserir_incompleto(chave)
 
     def dividi_pagina(self, i):
-        t = self.t
+        ordem = self.ordem
         y = self.filhos[i]
-        z = No(t, y.folha)
+        z = No(ordem, y.folha)
         self.filhos.insert(i + 1, z)
-        self.chaves.insert(i, y.chaves[t - 1])
+        self.chaves.insert(i, y.chaves[ordem - 1])
 
-        z.chaves = y.chaves[t:(2 * t - 1)]
-        y.chaves = y.chaves[0:(t - 1)]
+        z.chaves = y.chaves[ordem:(2 * ordem - 1)]
+        y.chaves = y.chaves[0:(ordem - 1)]
 
         if not y.folha:
-            z.filhos = y.filhos[t:(2 * t)]
-            y.filhos = y.filhos[0:(t)]
+            z.filhos = y.filhos[ordem:(2 * ordem)]
+            y.filhos = y.filhos[0:(ordem)]
