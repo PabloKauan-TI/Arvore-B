@@ -1,79 +1,79 @@
-from No import BTreeNode
+from No import No
 
-class BTree:
+class ArvoreB:
     def __init__(self, t):
-        self.root = BTreeNode(t, True)
+        self.raiz = No(t, True)
         self.t = t
 
-    def insert(self, key):
-        root = self.root
-        if len(root.keys) == 2 * self.t - 1:
-            new_root = BTreeNode(self.t, False)
-            new_root.children.append(root)
-            new_root.split_child(0)
+    def inserir(self, chave):
+        raiz = self.raiz
+        if len(raiz.chaves) == 2 * self.t - 1:
+            new_raiz = No(self.t, False)
+            new_raiz.filhos.append(raiz)
+            new_raiz.dividi_pagina(0)
             idx = 0
-            if key > new_root.keys[0]:
+            if chave > new_raiz.chaves[0]:
                 idx += 1
-            new_root.children[idx].insert_non_full(key)
-            self.root = new_root
+            new_raiz.filhos[idx].inserir_incompleto(chave)
+            self.raiz = new_raiz
         else:
-            root.insert_non_full(key)
+            raiz.inserir_incompleto(chave)
 
-    def search(self, key):
-        return self._search(self.root, key)
+    def procurar(self, chave):
+        return self.procurar_auxiliar(self.raiz, chave)
 
-    def _search(self, node, key):
+    def procurar_auxiliar(self, no, chave):
         i = 0
-        while i < len(node.keys) and key > node.keys[i]:
+        while i < len(no.chaves) and chave > no.chaves[i]:
             i += 1
-        if i < len(node.keys) and key == node.keys[i]:
-            return node
-        elif node.leaf:
+        if i < len(no.chaves) and chave == no.chaves[i]:
+            return no
+        elif no.folha:
             return None
         else:
-            return self._search(node.children[i], key)
+            return self.procurar_auxiliar(no.filhos[i], chave)
 
-    def get_max_level(self):
-            return self._get_max_level(self.root)
+    def quantidade_de_niveis(self):
+            return self.ultimo_nivel(self.raiz) + 1
 
-    def _get_max_level(self, node):
-        if node.leaf:
+    def ultimo_nivel(self, no):
+        if no.folha:
             return 0
         else:
-            return 1 + max(self._get_max_level(child) for child in node.children)
+            return 1 + max(self.ultimo_nivel(filho) for filho in no.filhos)
 
-    def print_tree(self):
+    def escrever(self):
         with open("saida.txt", 'w') as arquivo:
             arquivo.write("")
 
-        if not self.root:
+        if not self.raiz:
             with open("saida.txt", 'w') as arquivo:
                 arquivo.write("The tree is empty.")
                 return
         
         with open("saida.txt", 'a') as arquivo:
-            arquivo.write(str(self.t) + " " + str(self.get_max_level() + 1) + "\n")
+            arquivo.write(str(self.t) + " " + str(self.quantidade_de_niveis()) + "\n")
             
         
-        queue = [(self.root, 0)]  # Fila de nós para BFS com seus níveis
-        current_level = 0
-        level_nodes = []
+        fila_de_nos = [(self.raiz, 0)]  # Fila de nós para BFS com seus níveis
+        nivel_atual = 0
+        nos_do_nivel = []
 
-        while queue:
-            node, level = queue.pop(0)
+        while fila_de_nos:
+            no, nivel = fila_de_nos.pop(0)
             
-            if level > current_level:
+            if nivel > nivel_atual:
                 with open("saida.txt", 'a') as arquivo:
-                    arquivo.write(f"Level {current_level}: {' - '.join(level_nodes)}\n")
-                level_nodes = []
-                current_level = level
+                    arquivo.write(f"Nivel: {nivel_atual}: {' - '.join(nos_do_nivel)}\n")
+                nos_do_nivel = []
+                nivel_atual = nivel
             
-            level_nodes.append('[' + ' '.join(map(str, node.keys)) + ']')
+            nos_do_nivel.append('[' + ' '.join(map(str, no.chaves)) + ']')
 
-            for child in node.children:
-                queue.append((child, level + 1))
+            for filho in no.filhos:
+                fila_de_nos.append((filho, nivel + 1))
         
-        # Print the last level
-        if level_nodes:
+        # Print the last nivel
+        if nos_do_nivel:
             with open("saida.txt", 'a') as arquivo:
-                arquivo.write(f"Level {current_level}: {' - '.join(level_nodes)}")
+                arquivo.write(f"Nivel {nivel_atual}: {' - '.join(nos_do_nivel)}")

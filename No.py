@@ -1,39 +1,39 @@
-class BTreeNode:
-    def __init__(self, t, leaf=False):
+class No:
+    def __init__(self, t, folha=False):
         self.t = t  # Grau mínimo (define o intervalo de número de chaves)
-        self.leaf = leaf  # Verdadeiro se o nó é uma folha
-        self.keys = []  # Lista de chaves no nó
-        self.children = []  # Lista de filhos (apenas se não for uma folha)
+        self.folha = folha  # Verdadeiro se o nó é uma folha
+        self.chaves = []  # Lista de chaves no nó
+        self.filhos = []  # Lista de filhos (apenas se não for uma folha)
 
-    def insert_non_full(self, key):
-        i = len(self.keys) - 1
+    def inserir_incompleto(self, chave):
+        i = len(self.chaves) - 1
 
-        if self.leaf:
-            self.keys.append(None)
-            while i >= 0 and key < self.keys[i]:
-                self.keys[i + 1] = self.keys[i]
+        if self.folha:
+            self.chaves.append(None)
+            while i >= 0 and chave < self.chaves[i]:
+                self.chaves[i + 1] = self.chaves[i]
                 i -= 1
-            self.keys[i + 1] = key
+            self.chaves[i + 1] = chave
         else:
-            while i >= 0 and key < self.keys[i]:
+            while i >= 0 and chave < self.chaves[i]:
                 i -= 1
             i += 1
-            if len(self.children[i].keys) == 2 * self.t - 1:
-                self.split_child(i)
-                if key > self.keys[i]:
+            if len(self.filhos[i].chaves) == 2 * self.t - 1:
+                self.dividi_pagina(i)
+                if chave > self.chaves[i]:
                     i += 1
-            self.children[i].insert_non_full(key)
+            self.filhos[i].inserir_incompleto(chave)
 
-    def split_child(self, i):
+    def dividi_pagina(self, i):
         t = self.t
-        y = self.children[i]
-        z = BTreeNode(t, y.leaf)
-        self.children.insert(i + 1, z)
-        self.keys.insert(i, y.keys[t - 1])
+        y = self.filhos[i]
+        z = No(t, y.folha)
+        self.filhos.insert(i + 1, z)
+        self.chaves.insert(i, y.chaves[t - 1])
 
-        z.keys = y.keys[t:(2 * t - 1)]
-        y.keys = y.keys[0:(t - 1)]
+        z.chaves = y.chaves[t:(2 * t - 1)]
+        y.chaves = y.chaves[0:(t - 1)]
 
-        if not y.leaf:
-            z.children = y.children[t:(2 * t)]
-            y.children = y.children[0:(t)]
+        if not y.folha:
+            z.filhos = y.filhos[t:(2 * t)]
+            y.filhos = y.filhos[0:(t)]

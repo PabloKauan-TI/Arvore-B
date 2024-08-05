@@ -1,4 +1,4 @@
-from ArvoreB import BTree
+from ArvoreB import ArvoreB
 
 if __name__ == "__main__":
     elementos = None
@@ -9,9 +9,9 @@ if __name__ == "__main__":
     for i in range(len(elementos)):
         if i==0:
             x = int(elementos[i])
-            arvore = BTree(x)
+            arvore = ArvoreB(x)
         else:
             x = int(elementos[i])
-            arvore.insert(x)
+            arvore.inserir(x)
 
-    arvore.print_tree()
+    arvore.escrever()
