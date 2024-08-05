@@ -1,9 +1,9 @@
 class No:
     def __init__(self, ordem, folha=False):
-        self.ordem = ordem  # Grau mínimo (define o intervalo de número de chaves)
-        self.folha = folha  # Verdadeiro se o nó é uma folha
-        self.chaves = []  # Lista de chaves no nó
-        self.filhos = []  # Lista de filhos (apenas se não for uma folha)
+        self.ordem = ordem
+        self.folha = folha  
+        self.chaves = []  
+        self.filhos = [] 
 
     def inserir_incompleto(self, chave):
         i = len(self.chaves) - 1

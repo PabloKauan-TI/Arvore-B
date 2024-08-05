@@ -55,7 +55,7 @@ class ArvoreB:
             arquivo.write(str(self.ordem) + " " + str(self.quantidade_de_niveis()) + "\n")
             
         
-        fila_de_nos = [(self.raiz, 0)]  # Fila de nós para BFS com seus níveis
+        fila_de_nos = [(self.raiz, 0)] 
         nivel_atual = 0
         nos_do_nivel = []
 
@@ -73,7 +73,6 @@ class ArvoreB:
             for filho in no.filhos:
                 fila_de_nos.append((filho, nivel + 1))
         
-        # Print the last nivel
         if nos_do_nivel:
             with open("saida.txt", 'a') as arquivo:
                 arquivo.write(f"Nivel {nivel_atual}: {' - '.join(nos_do_nivel)}")
